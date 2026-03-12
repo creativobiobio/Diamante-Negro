@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diamante Negro - Menú Exclusive</title>
+    <!-- Luxury Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Montserrat:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-black: #050505;
+            --card-black: #0f0f0f;
+            --gold-metallic: #d4af37;
+            --gold-light: #f1d592;
+            --text-gold: #c5a059;
+            --text-white: #ffffff;
+            --text-muted: #888888;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-black);
+            color: var(--text-white);
+            line-height: 1.6;
+            -webkit-tap-highlight-color: transparent;
+            overflow-x: hidden;
+        }
+
+        /* Pantalla de Carga */
+        #loader {
+            position: fixed;
+            inset: 0;
+            background: var(--bg-black);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            transition: opacity 0.6s ease;
+        }
+
+        .diamond-loader {
+            width: 50px;
+            height: 50px;
+            background: var(--gold-metallic);
+            transform: rotate(45deg);
+            animation: pulse-diamond 1.5s ease-in-out infinite;
+            box-shadow: 0 0 25px var(--gold-metallic);
+            margin-bottom: 30px;
+        }
+
+        @keyframes pulse-diamond {
+            0%, 100% { transform: rotate(45deg) scale(0.8); opacity: 0.5; }
+            50% { transform: rotate(45deg) scale(1.1); opacity: 1; }
+        }
+
+        .loader-text {
+            font-size: 10px;
+            letter-spacing: 5px;
+            color: var(--gold-metallic);
+            text-transform: uppercase;
+            text-align: center;
+        }
+
+        /* Header */
+        header {
+            padding: 60px 20px 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .logo-container {
+            width: 220px;
+            margin-bottom: 20px;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-container img {
+            max-width: 100%;
+            height: auto;
+            filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.3));
+        }
+
+        .luxury-line {
+            width: 100px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold-metallic), transparent);
+            margin: 20px 0;
+        }
+
+        /* Navegación Sticky */
+        .sticky-nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(5, 5, 5, 0.95);
+            backdrop-filter: blur(15px);
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+            overflow-x: auto;
+            white-space: nowrap;
+            scrollbar-width: none;
+        }
+
+        .sticky-nav::-webkit-scrollbar { display: none; }
+
+        .filter-container {
+            display: flex;
+            gap: 12px;
+            padding: 0 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .filter-btn {
+            background: transparent;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            color: var(--text-gold);
+            padding: 8px 22px;
+            border-radius: 0px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn.active {
+            background: var(--gold-metallic);
+            color: black;
+            border-color: var(--gold-metallic);
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+        }
+
+        /* Menú Grid */
+        main {
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 0 20px 100px;
+        }
+
+        .grid-menu {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+        }
+
+        @media (min-width: 768px) {
+            .grid-menu { grid-template-columns: 1fr 1fr; }
+        }
+
+        /* Tarjeta de Plato Exclusive */
+        .plato-card {
+            background: var(--card-black);
+            border: 1px solid rgba(212, 175, 55, 0.05);
+            display: flex;
+            height: 150px;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .plato-card:hover {
+            border-color: rgba(212, 175, 55, 0.3);
+            transform: translateY(-3px);
+        }
+
+        .plato-img {
+            width: 130px;
+            height: 100%;
+            flex-shrink: 0;
+            background: #0a0a0a;
+            position: relative;
+        }
+
+        .plato-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s ease;
+        }
+
+        .plato-card:hover .plato-img img {
+            transform: scale(1.1);
+        }
+
+        .plato-info {
+            padding: 15px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-width: 0;
+        }
+
+        .plato-header h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 17px;
+            color: var(--gold-light);
+            margin-bottom: 4px;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .plato-desc {
+            font-size: 11px;
+            color: var(--text-muted);
+            font-weight: 300;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .plato-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 8px;
+        }
+
+        .precio {
+            font-family: 'Playfair Display', serif;
+            color: var(--gold-metallic);
+            font-weight: 700;
+            font-size: 19px;
+        }
+
+        .badge-cat {
+            font-size: 8px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--text-gold);
+            opacity: 0.5;
+        }
+
+        /* Agotado */
+        .plato-card.agotado {
+            filter: grayscale(1);
+            opacity: 0.4;
+        }
+
+        .agotado-tag {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-15deg);
+            border: 2px solid var(--gold-metallic);
+            color: var(--gold-metallic);
+            padding: 4px 12px;
+            font-size: 9px;
+            font-weight: 900;
+            text-transform: uppercase;
+            z-index: 5;
+            background: var(--bg-black);
+        }
+
+        /* Footer */
+        footer {
+            padding: 60px 20px;
+            text-align: center;
+            background: #000;
+            border-top: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .footer-text {
+            font-size: 10px;
+            color: var(--text-gold);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        #error-display {
+            display: none;
+            color: #ff4757;
+            font-size: 11px;
+            text-align: center;
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid rgba(255, 71, 87, 0.3);
+            max-width: 80%;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="loader">
+        <div class="diamond-loader"></div>
+        <p class="loader-text">DIAMANTE NEGRO</p>
+        <div id="error-display">Error de sincronización. Reintentando...</div>
+    </div>
+
+    <header>
+        <div class="logo-container">
+            <img src="logo.png" alt="Logo Diamante Negro" onerror="this.src='https://via.placeholder.com/200x120/000000/D4AF37?text=DIAMANTE+NEGRO'">
+        </div>
+        <div class="luxury-line"></div>
+        <p class="footer-text" style="font-size: 8px; opacity: 0.8;">Premium Experience</p>
+    </header>
+
+    <nav class="sticky-nav">
+        <div class="filter-container" id="category-filters"></div>
+    </nav>
+
+    <main>
+        <div class="grid-menu" id="menu-items"></div>
+    </main>
+
+    <footer>
+        <p class="footer-text">Exclusividad en cada detalle</p>
+        <p style="font-size: 8px; margin-top: 20px; color: var(--text-muted); letter-spacing: 2px; opacity: 0.5;">DISEÑO & FOTOGRAFÍA GASTRONÓMICA</p>
+    </footer>
+
+    <script>
+        const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRgQ-ZRf2h64mfosx951LpKzVI5lIPAOuyb9ocFupCv7PycFK6tfY4tzWoBOOTmBluSXVmgH86YumWY/pub?gid=0&single=true&output=csv';
+        
+        let allItems = [];
+
+        function formatCLP(val) {
+            if (!val) return '$ 0';
+            const num = parseInt(val.toString().replace(/\D/g, ''));
+            return isNaN(num) ? `$ ${val}` : `$ ${num.toLocaleString('es-CL')}`;
+        }
+
+        // Función de parseo profesional para manejar saltos de línea y comas dentro de celdas
+        function parseCSV(text) {
+            const result = [];
+            let row = [];
+            let cell = '';
+            let inQuotes = false;
+            
+            // Eliminar BOM de Google Sheets si existe
+            text = text.replace(/^\uFEFF/, '');
+
+            for (let i = 0; i < text.length; i++) {
+                const char = text[i];
+                const next = text[i+1];
+                
+                if (inQuotes) {
+                    if (char === '"' && next === '"') { cell += '"'; i++; }
+                    else if (char === '"') inQuotes = false;
+                    else cell += char;
+                } else {
+                    if (char === '"') inQuotes = true;
+                    else if (char === ',') { row.push(cell); cell = ''; }
+                    else if (char === '\n' || char === '\r') {
+                        row.push(cell);
+                        if (row.length > 1 || row[0] !== '') result.push(row);
+                        row = []; cell = '';
+                        if (char === '\r' && next === '\n') i++;
+                    } else cell += char;
+                }
+            }
+            if (row.length || cell) { row.push(cell); result.push(row); }
+            return result;
+        }
+
+        async function loadData() {
+            console.log("Iniciando carga de datos...");
+            try {
+                const response = await fetch(SHEET_URL);
+                if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
+                
+                const csvText = await response.text();
+                const rows = parseCSV(csvText);
+                console.log("Filas detectadas:", rows.length);
+
+                if (rows.length < 2) throw new Error("La hoja de cálculo parece estar vacía.");
+
+                // Mapeo ignorando el encabezado (fila 0)
+                allItems = rows.slice(1).map((cols, index) => {
+                    // Verificación mínima: debe tener al menos nombre y categoría
+                    if (!cols[0] && !cols[1]) return null;
+
+                    return {
+                        categoria: (cols[0] || 'Varios').trim(),
+                        nombre: (cols[1] || `Plato ${index}`).trim(),
+                        descripcion: (cols[2] || '').trim(),
+                        precio: (cols[3] || '0').trim(),
+                        disponible: (cols[4] || 'SI').trim().toUpperCase() === 'SI',
+                        imagen: (cols[5] || '').trim()
+                    };
+                }).filter(item => item !== null);
+
+                console.log("Sincronización completa:", allItems.length, "ítems.");
+                renderFilters();
+                renderMenu('Todo');
+                hideLoader();
+
+            } catch (error) {
+                console.error("Fallo de conexión real:", error);
+                document.getElementById('error-display').style.display = 'block';
+                document.getElementById('error-display').innerText = "Error al leer la base de datos. Verifique su conexión.";
+                
+                // Si llegamos aquí y es GitHub, algo anda mal con el link.
+                // Cargamos demo solo tras 6 segundos de fallo absoluto
+                setTimeout(() => {
+                    if (allItems.length === 0) {
+                        loadDemo();
+                    }
+                }, 6000);
+            }
+        }
+
+        function loadDemo() {
+            allItems = [
+                { categoria: 'Carnes', nombre: 'Ejemplo Tomahawk', descripcion: 'Corte premium de demostración.', precio: '45000', disponible: true, imagen: '' },
+                { categoria: 'Tablas', nombre: 'Tabla Mar y Tierra', descripcion: 'Variedad de mariscos y carnes.', precio: '28000', disponible: true, imagen: '' }
+            ];
+            renderFilters();
+            renderMenu('Todo');
+            hideLoader();
+        }
+
+        function hideLoader() {
+            const loader = document.getElementById('loader');
+            loader.style.opacity = '0';
+            setTimeout(() => {
+                loader.style.display = 'none';
+            }, 600);
+        }
+
+        function renderFilters() {
+            const container = document.getElementById('category-filters');
+            const rawCats = [...new Set(allItems.map(i => i.categoria))];
+            
+            const priority = ['Carnes', 'Tablas', 'Sandwich'];
+            const others = rawCats.filter(c => !priority.includes(c)).sort();
+            const finalCats = ['Todo', ...priority.filter(p => rawCats.includes(p)), ...others];
+
+            container.innerHTML = finalCats.map(cat => `
+                <button class="filter-btn ${cat === 'Todo' ? 'active' : ''}" onclick="filterBy('${cat}', this)">
+                    ${cat.toUpperCase()}
+                </button>
+            `).join('');
+        }
+
+        function filterBy(cat, btn) {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderMenu(cat);
+            window.scrollTo({ top: document.querySelector('header').offsetHeight - 20, behavior: 'smooth' });
+        }
+
+        function renderMenu(cat) {
+            const container = document.getElementById('menu-items');
+            const filtered = cat === 'Todo' ? allItems : allItems.filter(i => i.categoria === cat);
+            
+            container.innerHTML = filtered.map(item => `
+                <div class="plato-card ${!item.disponible ? 'agotado' : ''}">
+                    ${!item.disponible ? '<div class="agotado-tag">Agotado</div>' : ''}
+                    <div class="plato-img">
+                        ${item.imagen ? `<img src="${item.imagen}" alt="${item.nombre}" onerror="this.src='https://via.placeholder.com/300x300/111/D4AF37?text=Premium'">` : `<div style="height:100%; display:flex; align-items:center; justify-content:center; color:var(--gold-metallic);">✧</div>`}
+                    </div>
+                    <div class="plato-info">
+                        <div class="plato-header">
+                            <h3>${item.nombre}</h3>
+                            <p class="plato-desc">${item.descripcion}</p>
+                        </div>
+                        <div class="plato-footer">
+                            <span class="precio">${formatCLP(item.precio)}</span>
+                            <span class="badge-cat">${item.categoria}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        window.onload = loadData;
+    </script>
+</body>
+</html>
