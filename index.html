@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diamante Negro - Menú Exclusive</title>
+    <!-- Fuentes -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --negro: #050505;
+            --negro-card: #0f0f0f;
+            --dorado: #d4af37;
+            --dorado-tenue: #f1d592;
+            --blanco: #ffffff;
+            --gris: #888888;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--negro);
+            color: var(--blanco);
+            line-height: 1.6;
+        }
+
+        /* Pantalla de Carga Simple */
+        #loader {
+            position: fixed;
+            inset: 0;
+            background: var(--negro);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(212, 175, 55, 0.1);
+            border-top: 3px solid var(--dorado);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Estética Diamante Negro */
+        header {
+            padding: 50px 20px 30px;
+            text-align: center;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .logo-box {
+            width: 180px;
+            margin: 0 auto 15px;
+        }
+
+        .logo-box img { width: 100%; height: auto; }
+
+        .linea {
+            width: 60px;
+            height: 1px;
+            background: var(--dorado);
+            margin: 15px auto;
+        }
+
+        /* Filtros */
+        .sticky-nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(5, 5, 5, 0.95);
+            backdrop-filter: blur(8px);
+            padding: 15px 0;
+            overflow-x: auto;
+            white-space: nowrap;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .filter-container {
+            display: flex;
+            gap: 10px;
+            padding: 0 20px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .filter-btn {
+            background: transparent;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            color: var(--dorado);
+            padding: 8px 18px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+
+        .filter-btn.active {
+            background: var(--dorado);
+            color: black;
+        }
+
+        /* Menú */
+        main {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 0 15px 100px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        @media (min-width: 768px) {
+            .grid { grid-template-columns: 1fr 1fr; }
+        }
+
+        .card {
+            background: var(--negro-card);
+            border: 1px solid rgba(212, 175, 55, 0.05);
+            display: flex;
+            height: 130px;
+            position: relative;
+        }
+
+        .card-img {
+            width: 110px;
+            height: 100%;
+            background: #000;
+            flex-shrink: 0;
+        }
+
+        .card-img img { width: 100%; height: 100%; object-fit: cover; }
+
+        .card-info {
+            padding: 12px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-width: 0;
+        }
+
+        h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 16px;
+            color: var(--dorado-tenue);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .desc {
+            font-size: 10px;
+            color: var(--gris);
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .precio {
+            color: var(--dorado);
+            font-weight: 700;
+            font-size: 18px;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .badge {
+            font-size: 7px;
+            text-transform: uppercase;
+            color: var(--dorado);
+            opacity: 0.5;
+        }
+
+        /* Agotado */
+        .agotado { opacity: 0.3; filter: grayscale(1); }
+        .agotado-tag {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%) rotate(-10deg);
+            border: 1px solid var(--dorado);
+            color: var(--dorado);
+            padding: 2px 8px;
+            font-size: 9px;
+            font-weight: 900;
+            background: black;
+            z-index: 10;
+        }
+
+        footer {
+            padding: 40px 20px;
+            text-align: center;
+            border-top: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .f-text { font-size: 9px; color: var(--dorado); letter-spacing: 2px; text-transform: uppercase; }
+    </style>
+</head>
+<body>
+
+    <div id="loader">
+        <div class="spinner"></div>
+        <p style="margin-top: 15px; font-size: 9px; color: var(--dorado); letter-spacing: 3px;">DIAMANTE NEGRO</p>
+    </div>
+
+    <header>
+        <div class="logo-box">
+            <img src="logo.png" alt="Logo" onerror="this.src='https://via.placeholder.com/200x80/000/D4AF37?text=DIAMANTE+NEGRO'">
+        </div>
+        <div class="linea"></div>
+        <p class="f-text" style="opacity: 0.6;">Premium Experience</p>
+    </header>
+
+    <nav class="sticky-nav">
+        <div class="filter-container" id="category-filters"></div>
+    </nav>
+
+    <main>
+        <div class="grid" id="menu-items"></div>
+    </main>
+
+    <footer>
+        <p class="f-text">Diamante Negro Exclusive</p>
+    </footer>
+
+    <script>
+        const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRgQ-ZRf2h64mfosx951LpKzVI5lIPAOuyb9ocFupCv7PycFK6tfY4tzWoBOOTmBluSXVmgH86YumWY/pub?gid=0&single=true&output=csv';
+        
+        let allItems = [];
+
+        // Failsafe: Si en 3.5 segundos no cargó, quitamos el loader igual
+        setTimeout(hideLoader, 3500);
+
+        function formatCLP(val) {
+            const num = parseInt(val.toString().replace(/\D/g, ''));
+            return isNaN(num) ? `$ ${val}` : `$ ${num.toLocaleString('es-CL')}`;
+        }
+
+        function hideLoader() {
+            const l = document.getElementById('loader');
+            if (l) l.style.display = 'none';
+        }
+
+        // El mismo motor que funcionó en el Fogón
+        function parseCSV(text) {
+            const rows = [];
+            let currentRow = [];
+            let currentField = '';
+            let inQuotes = false;
+            for (let i = 0; i < text.length; i++) {
+                const char = text[i];
+                const nextChar = text[i + 1];
+                if (inQuotes) {
+                    if (char === '"' && nextChar === '"') { currentField += '"'; i++; }
+                    else if (char === '"') inQuotes = false;
+                    else currentField += char;
+                } else {
+                    if (char === '"') inQuotes = true;
+                    else if (char === ',') { currentRow.push(currentField); currentField = ''; }
+                    else if (char === '\r' || char === '\n') {
+                        currentRow.push(currentField);
+                        if (currentRow.length > 1 || currentRow[0] !== '') rows.push(currentRow);
+                        currentRow = []; currentField = '';
+                        if (char === '\r' && nextChar === '\n') i++;
+                    } else currentField += char;
+                }
+            }
+            if (currentRow.length > 0 || currentField !== '') { currentRow.push(currentField); rows.push(currentRow); }
+            return rows;
+        }
+
+        async function loadData() {
+            try {
+                const response = await fetch(SHEET_URL);
+                const data = await response.text();
+                const parsed = parseCSV(data).slice(1);
+
+                allItems = parsed.map(cols => {
+                    if (!cols || cols.length < 2 || !cols[1]) return null;
+                    return {
+                        cat: (cols[0] || 'Varios').trim(),
+                        nom: (cols[1] || '').trim(),
+                        des: (cols[2] || '').trim(),
+                        pre: (cols[3] || '0').trim(),
+                        dis: (cols[4] || 'SI').trim().toUpperCase() === 'SI',
+                        img: (cols[5] || '').trim()
+                    };
+                }).filter(i => i !== null);
+
+                renderFilters();
+                renderMenu('Todo');
+            } catch (error) {
+                console.error("Error:", error);
+            } finally {
+                hideLoader(); // Se ejecuta siempre
+            }
+        }
+
+        function renderFilters() {
+            const container = document.getElementById('category-filters');
+            const cats = [...new Set(allItems.map(i => i.cat))];
+            const priority = ['Carnes', 'Tablas', 'Sandwich'];
+            const others = cats.filter(c => !priority.includes(c)).sort();
+            const final = ['Todo', ...priority.filter(p => cats.includes(p)), ...others];
+
+            container.innerHTML = final.map(c => `
+                <button class="filter-btn ${c === 'Todo' ? 'active' : ''}" onclick="filterBy('${c}', this)">
+                    ${c}
+                </button>
+            `).join('');
+        }
+
+        function filterBy(c, btn) {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderMenu(c);
+            window.scrollTo({ top: document.querySelector('header').offsetHeight - 20, behavior: 'smooth' });
+        }
+
+        function renderMenu(c) {
+            const container = document.getElementById('menu-items');
+            const filtered = c === 'Todo' ? allItems : allItems.filter(i => i.cat === c);
+
+            container.innerHTML = filtered.map(i => `
+                <div class="card ${!i.dis ? 'agotado' : ''}">
+                    ${!i.dis ? '<div class="agotado-tag">Agotado</div>' : ''}
+                    <div class="card-img">
+                        ${i.img ? `<img src="${i.img}" alt="${i.nom}" onerror="this.src='https://via.placeholder.com/300x300/111/D4AF37?text=...'">` : '<div style="height:100%; display:flex; align-items:center; justify-content:center; color:var(--dorado)">✧</div>'}
+                    </div>
+                    <div class="card-info">
+                        <div>
+                            <h3>${i.nom}</h3>
+                            <p class="desc">${i.des}</p>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <span class="precio">${formatCLP(i.pre)}</span>
+                            <span class="badge">${i.cat}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        window.onload = loadData;
+    </script>
+</body>
+</html>
