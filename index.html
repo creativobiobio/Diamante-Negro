@@ -202,6 +202,33 @@ header{
   margin-left:8px;
 }
 
+/* precios con etiqueta */
+.precios{
+  display:flex;
+  flex-direction:column;
+  gap:3px;
+}
+
+.precio-fila{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:8px;
+}
+
+.precio-label{
+  font-size:11px;
+  color:var(--muted);
+  white-space:nowrap;
+}
+
+.precio-valor{
+  font-weight:700;
+  font-size:14px;
+  color:var(--accent2);
+  white-space:nowrap;
+}
+
 footer{
   text-align:center;
   padding:45px 20px;
@@ -276,12 +303,16 @@ async function load(){
         const clean=row.split(",").map(x=>x.trim().replace(/^"|"$/g,""));
         if(clean.length<4) return null;
         return{
-          cat:clean[0]||"Otros",
-          name:clean[1]||"",
-          desc:clean[2]||"",
-          price:clean[3]||"0",
-          stock:clean[4]||"SI",
-          img:clean[5]||""
+          cat:      clean[0]||"Otros",
+          name:     clean[1]||"",
+          desc:     clean[2]||"",
+          price:    clean[3]||"0",
+          stock:    clean[4]||"SI",
+          img:      clean[5]||"",
+          etiqueta1:clean[6]||"",
+          precio1:  clean[7]||"",
+          etiqueta2:clean[8]||"",
+          precio2:  clean[9]||""
         };
       }catch{
         return null;
@@ -314,6 +345,25 @@ function renderCats(){
   container.firstChild.classList.add("active");
 }
 
+function renderPrecio(i){
+  if(i.etiqueta1){
+    return `
+      <div class="precios">
+        <div class="precio-fila">
+          <span class="precio-label">${i.etiqueta1}</span>
+          <span class="precio-valor">$ ${Number(i.precio1).toLocaleString("es-CL")}</span>
+        </div>
+        ${i.etiqueta2?`
+        <div class="precio-fila">
+          <span class="precio-label">${i.etiqueta2}</span>
+          <span class="precio-valor">$ ${Number(i.precio2).toLocaleString("es-CL")}</span>
+        </div>`:""}
+      </div>
+    `;
+  }
+  return `<div class="price">$ ${Number(i.price).toLocaleString("es-CL")}</div>`;
+}
+
 function renderMenu(cat){
   const container=document.getElementById("menu");
   let filtered=cat==="Todo"?items:items.filter(i=>i.cat===cat);
@@ -342,7 +392,7 @@ function renderMenu(cat){
           <div class="desc">${i.desc||""}</div>
         </div>
         <div class="bottom">
-          <div class="price">$ ${Number(i.price).toLocaleString("es-CL")}</div>
+          ${renderPrecio(i)}
           <div class="badge">${i.cat}</div>
         </div>
       </div>
