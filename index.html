@@ -156,17 +156,21 @@ header{
   justify-content:space-between;
   align-items:center;
 }
+/* FIX 3: precio siempre en una sola línea */
 .price{
   font-weight:700;
   font-size:15px;
   color:var(--accent2);
+  white-space:nowrap;
 }
+/* FIX 2: badge con más contraste */
 .badge{
   font-size:10px;
-  background:#1a1a1a;
+  background:#d4af37;
   padding:3px 8px;
   border-radius:6px;
-  color:#aaa;
+  color:#000;
+  font-weight:600;
 }
 footer{
   text-align:center;
@@ -275,6 +279,12 @@ function renderMenu(cat){
       i.desc.toLowerCase().includes(q)
     );
   }
+  /* FIX 1: agotados siempre al final */
+  filtered.sort((a,b)=>{
+    const aOff=a.stock?.toUpperCase()==="NO"?1:0;
+    const bOff=b.stock?.toUpperCase()==="NO"?1:0;
+    return aOff-bOff;
+  });
   container.innerHTML=filtered.map(i=>`
     <div class="card ${i.stock?.toUpperCase()==="NO"?"agotado":""}">
       <div class="img">
