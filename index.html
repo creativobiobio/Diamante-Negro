@@ -7,7 +7,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Diamante Negro - Menú</title>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 
 <style>
 
@@ -32,8 +32,6 @@ body{
   color:var(--text);
 }
 
-/* PANTALLA DE CARGA */
-
 #splash{
   position:fixed;
   inset:0;
@@ -51,84 +49,54 @@ body{
   pointer-events:none;
 }
 
-.diamond-wrap{
-  position:relative;
-  width:80px;
-  height:80px;
+.splash-diamond{
+  width:120px;
+  height:120px;
   margin-bottom:28px;
+  animation:diamondpulse 2s ease-in-out infinite;
 }
 
-.diamond{
-  width:80px;
-  height:80px;
-  background:linear-gradient(135deg,var(--accent),var(--accent2),var(--accent));
-  transform:rotate(45deg);
-  border-radius:6px;
-  animation:pulse 1.5s ease-in-out infinite;
-}
-
-.diamond-shine{
-  position:absolute;
-  top:10px;
-  left:10px;
-  width:20px;
-  height:20px;
-  background:rgba(255,255,255,0.4);
-  transform:rotate(45deg);
-  border-radius:2px;
-  animation:shine 1.5s ease-in-out infinite;
-}
-
-@keyframes pulse{
-  0%,100%{ box-shadow:0 0 20px rgba(212,175,55,0.4); transform:rotate(45deg) scale(1); }
-  50%{ box-shadow:0 0 50px rgba(212,175,55,0.9); transform:rotate(45deg) scale(1.08); }
-}
-
-@keyframes shine{
-  0%,100%{ opacity:0.4; }
-  50%{ opacity:1; }
+@keyframes diamondpulse{
+  0%,100%{ filter:drop-shadow(0 0 10px rgba(212,175,55,0.4)); }
+  50%{ filter:drop-shadow(0 0 30px rgba(212,175,55,0.9)); }
 }
 
 .splash-title{
   font-family:Cinzel;
-  font-size:28px;
+  font-size:26px;
+  font-weight:600;
   color:var(--accent);
-  letter-spacing:4px;
-  margin-bottom:6px;
-  text-shadow:0 0 20px rgba(212,175,55,0.5);
+  letter-spacing:5px;
+  margin-bottom:4px;
 }
 
 .splash-sub{
+  font-family:Cinzel;
   font-size:11px;
-  color:#555;
-  letter-spacing:3px;
-  text-transform:uppercase;
-  margin-bottom:40px;
+  font-weight:400;
+  color:#8a7535;
+  letter-spacing:5px;
+  margin-bottom:36px;
 }
 
-.splash-bar{
-  width:160px;
-  height:2px;
-  background:#1a1a1a;
-  border-radius:2px;
-  overflow:hidden;
+.splash-spinner-wrap{
+  width:36px;
+  height:36px;
 }
 
-.splash-bar-inner{
-  height:100%;
-  width:0%;
-  background:linear-gradient(90deg,var(--accent),var(--accent2));
-  border-radius:2px;
-  animation:barra 1.8s ease-in-out forwards;
+.splash-spinner{
+  width:36px;
+  height:36px;
+  border:2px solid #222;
+  border-top:2px solid var(--accent);
+  border-right:2px solid var(--accent2);
+  border-radius:50%;
+  animation:spin 1s linear infinite;
 }
 
-@keyframes barra{
-  0%{ width:0%; }
-  60%{ width:80%; }
-  100%{ width:100%; }
+@keyframes spin{
+  to{ transform:rotate(360deg); }
 }
-
-/* HEADER */
 
 header{
   padding:35px 20px 10px;
@@ -383,16 +351,29 @@ footer{
 
 <body>
 
-<!-- PANTALLA DE CARGA -->
 <div id="splash">
-  <div class="diamond-wrap">
-    <div class="diamond"></div>
-    <div class="diamond-shine"></div>
-  </div>
+  <svg class="splash-diamond" viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#f1d87a"/>
+        <stop offset="50%" stop-color="#d4af37"/>
+        <stop offset="100%" stop-color="#8a6800"/>
+      </linearGradient>
+    </defs>
+    <polygon points="75,60 225,60 260,130 150,260 40,130" fill="none" stroke="url(#g1)" stroke-width="5" stroke-linejoin="round"/>
+    <line x1="40"  y1="130" x2="260" y2="130" stroke="url(#g1)" stroke-width="4"/>
+    <line x1="75"  y1="60"  x2="150" y2="260" stroke="url(#g1)" stroke-width="3"/>
+    <line x1="225" y1="60"  x2="150" y2="260" stroke="url(#g1)" stroke-width="3"/>
+    <line x1="150" y1="60"  x2="150" y2="260" stroke="url(#g1)" stroke-width="3"/>
+    <line x1="75"  y1="60"  x2="260" y2="130" stroke="url(#g1)" stroke-width="3"/>
+    <line x1="225" y1="60"  x2="40"  y2="130" stroke="url(#g1)" stroke-width="3"/>
+  </svg>
+
   <div class="splash-title">DIAMANTE NEGRO</div>
-  <div class="splash-sub">Curanilahue · Chile</div>
-  <div class="splash-bar">
-    <div class="splash-bar-inner"></div>
+  <div class="splash-sub">BAR RESTAURANTE</div>
+
+  <div class="splash-spinner-wrap">
+    <div class="splash-spinner"></div>
   </div>
 </div>
 
@@ -419,13 +400,21 @@ footer{
 const SHEET_URL="https://docs.google.com/spreadsheets/d/e/2PACX-1vRgQ-ZRf2h64mfosx951LpKzVI5lIPAOuyb9ocFupCv7PycFK6tfY4tzWoBOOTmBluSXVmgH86YumWY/pub?gid=0&single=true&output=csv";
 
 let items=[];
+let menuListo=false;
+let tiempoMinimoCumplido=false;
 
-function ocultarSplash(){
-  document.getElementById("splash").classList.add("oculto");
+function intentarOcultarSplash(){
+  if(menuListo && tiempoMinimoCumplido){
+    document.getElementById("splash").classList.add("oculto");
+  }
 }
 
 async function load(){
-  const inicio=Date.now();
+  setTimeout(()=>{
+    tiempoMinimoCumplido=true;
+    intentarOcultarSplash();
+  },1800);
+
   try{
     const url=SHEET_URL+"&t="+Date.now();
     const r=await fetch(url);
@@ -462,10 +451,8 @@ async function load(){
       '<div style="text-align:center;padding:60px 20px;color:#777">Error al cargar el menú.<br><br>'+
       '<button onclick="location.reload()" style="background:var(--accent);color:#000;border:none;padding:8px 20px;border-radius:8px;cursor:pointer;font-size:13px">Reintentar</button></div>';
   }finally{
-    // mínimo 1800ms para que el splash se vea completo
-    const transcurrido=Date.now()-inicio;
-    const espera=Math.max(0,1800-transcurrido);
-    setTimeout(ocultarSplash, espera);
+    menuListo=true;
+    intentarOcultarSplash();
   }
 }
 
