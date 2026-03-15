@@ -368,10 +368,8 @@ footer{
     <line x1="75"  y1="60"  x2="260" y2="130" stroke="url(#g1)" stroke-width="3"/>
     <line x1="225" y1="60"  x2="40"  y2="130" stroke="url(#g1)" stroke-width="3"/>
   </svg>
-
   <div class="splash-title">DIAMANTE NEGRO</div>
   <div class="splash-sub">BAR RESTAURANTE</div>
-
   <div class="splash-spinner-wrap">
     <div class="splash-spinner"></div>
   </div>
@@ -409,6 +407,21 @@ function intentarOcultarSplash(){
   }
 }
 
+// parser robusto que respeta comas dentro de comillas
+function parsearFila(row){
+  const cols=[];
+  let actual="";
+  let entreComillas=false;
+  for(let i=0;i<row.length;i++){
+    const c=row[i];
+    if(c==='"'){ entreComillas=!entreComillas; continue; }
+    if(c===',' && !entreComillas){ cols.push(actual.trim()); actual=""; continue; }
+    actual+=c;
+  }
+  cols.push(actual.trim());
+  return cols;
+}
+
 async function load(){
   setTimeout(()=>{
     tiempoMinimoCumplido=true;
@@ -424,7 +437,7 @@ async function load(){
     items=rows.map(row=>{
       try{
         if(!row.trim()) return null;
-        const clean=row.split(",").map(x=>x.trim().replace(/^"|"$/g,""));
+        const clean=parsearFila(row);
         if(clean.length<4) return null;
         return{
           cat:        clean[0]||"Otros",
