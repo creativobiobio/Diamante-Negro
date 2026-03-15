@@ -164,10 +164,17 @@ header{
   justify-content:space-between;
 }
 
+.title-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:8px;
+  margin-bottom:5px;
+}
+
 .title{
   font-family:Cinzel;
   font-size:17px;
-  margin-bottom:5px;
   color:var(--accent);
 }
 
@@ -180,9 +187,8 @@ header{
 
 .bottom{
   display:flex;
-  justify-content:space-between;
+  justify-content:flex-start;
   align-items:flex-end;
-  gap:8px;
 }
 
 .price{
@@ -200,7 +206,6 @@ header{
   color:#000;
   font-weight:600;
   flex-shrink:0;
-  margin-left:8px;
 }
 
 .precios{
@@ -211,7 +216,6 @@ header{
 
 .precio-fila{
   display:flex;
-  justify-content:space-between;
   align-items:center;
   gap:8px;
 }
@@ -388,12 +392,14 @@ function renderMenu(cat){
       </div>
       <div class="info">
         <div>
-          <div class="title">${i.name}</div>
+          <div class="title-row">
+            <div class="title">${i.name}</div>
+            <div class="badge">${i.cat}</div>
+          </div>
           <div class="desc">${i.desc||""}</div>
         </div>
         <div class="bottom">
           ${renderPrecio(i)}
-          <div class="badge">${i.cat}</div>
         </div>
       </div>
     </div>
