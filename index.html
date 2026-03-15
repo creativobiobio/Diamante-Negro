@@ -181,7 +181,8 @@ header{
 .bottom{
   display:flex;
   justify-content:space-between;
-  align-items:center;
+  align-items:flex-end;
+  gap:8px;
 }
 
 .price{
@@ -202,7 +203,6 @@ header{
   margin-left:8px;
 }
 
-/* precios con etiqueta */
 .precios{
   display:flex;
   flex-direction:column;
@@ -347,7 +347,7 @@ function renderCats(){
 
 function renderPrecio(i){
   if(i.etiqueta1){
-    return `
+    return`
       <div class="precios">
         <div class="precio-fila">
           <span class="precio-label">${i.etiqueta1}</span>
@@ -361,7 +361,7 @@ function renderPrecio(i){
       </div>
     `;
   }
-  return `<div class="price">$ ${Number(i.price).toLocaleString("es-CL")}</div>`;
+  return`<div class="price">$ ${Number(i.price).toLocaleString("es-CL")}</div>`;
 }
 
 function renderMenu(cat){
