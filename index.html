@@ -181,13 +181,13 @@ header{
 
 .adicionales{
   font-size:11px;
-  color:#888;
+  color:var(--accent2);
   margin-bottom:8px;
   line-height:1.4;
 }
 
 .adicionales-label{
-  color:#666;
+  color:var(--accent);
   font-size:10px;
   text-transform:uppercase;
   letter-spacing:0.5px;
@@ -209,16 +209,17 @@ header{
 }
 
 .badge{
-  font-size:10px;
+  font-size:9px;
   background:#d4af37;
   padding:3px 6px;
   border-radius:6px;
   color:#000;
   font-weight:600;
   flex-shrink:0;
-  max-width:80px;
+  max-width:75px;
   text-align:center;
-  word-break:break-word;
+  word-break:keep-all;
+  overflow-wrap:normal;
   white-space:normal;
   line-height:1.3;
 }
