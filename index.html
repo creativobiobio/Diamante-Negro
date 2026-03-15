@@ -175,8 +175,23 @@ header{
 .desc{
   font-size:12px;
   color:var(--muted);
-  margin-bottom:10px;
+  margin-bottom:6px;
   min-height:18px;
+}
+
+.adicionales{
+  font-size:11px;
+  color:#888;
+  margin-bottom:8px;
+  line-height:1.4;
+}
+
+.adicionales-label{
+  color:#666;
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:0.5px;
+  margin-bottom:2px;
 }
 
 .bottom{
@@ -307,16 +322,17 @@ async function load(){
         const clean=row.split(",").map(x=>x.trim().replace(/^"|"$/g,""));
         if(clean.length<4) return null;
         return{
-          cat:      clean[0]||"Otros",
-          name:     clean[1]||"",
-          desc:     clean[2]||"",
-          price:    clean[3]||"0",
-          stock:    clean[4]||"SI",
-          img:      clean[5]||"",
-          etiqueta1:clean[6]||"",
-          precio1:  clean[7]||"",
-          etiqueta2:clean[8]||"",
-          precio2:  clean[9]||""
+          cat:        clean[0]||"Otros",
+          name:       clean[1]||"",
+          desc:       clean[2]||"",
+          price:      clean[3]||"0",
+          stock:      clean[4]||"SI",
+          img:        clean[5]||"",
+          etiqueta1:  clean[6]||"",
+          precio1:    clean[7]||"",
+          etiqueta2:  clean[8]||"",
+          precio2:    clean[9]||"",
+          adicionales:clean[10]||""
         };
       }catch{
         return null;
@@ -394,6 +410,11 @@ function renderMenu(cat){
         <div>
           <div class="title">${i.name}</div>
           <div class="desc">${i.desc||""}</div>
+          ${i.adicionales?`
+          <div class="adicionales">
+            <div class="adicionales-label">Adicionales</div>
+            ${i.adicionales}
+          </div>`:""}
         </div>
         <div class="bottom">
           ${renderPrecio(i)}
