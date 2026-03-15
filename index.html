@@ -32,6 +32,104 @@ body{
   color:var(--text);
 }
 
+/* PANTALLA DE CARGA */
+
+#splash{
+  position:fixed;
+  inset:0;
+  background:#000;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+  transition:opacity 0.8s ease;
+}
+
+#splash.oculto{
+  opacity:0;
+  pointer-events:none;
+}
+
+.diamond-wrap{
+  position:relative;
+  width:80px;
+  height:80px;
+  margin-bottom:28px;
+}
+
+.diamond{
+  width:80px;
+  height:80px;
+  background:linear-gradient(135deg,var(--accent),var(--accent2),var(--accent));
+  transform:rotate(45deg);
+  border-radius:6px;
+  animation:pulse 1.5s ease-in-out infinite;
+}
+
+.diamond-shine{
+  position:absolute;
+  top:10px;
+  left:10px;
+  width:20px;
+  height:20px;
+  background:rgba(255,255,255,0.4);
+  transform:rotate(45deg);
+  border-radius:2px;
+  animation:shine 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse{
+  0%,100%{ box-shadow:0 0 20px rgba(212,175,55,0.4); transform:rotate(45deg) scale(1); }
+  50%{ box-shadow:0 0 50px rgba(212,175,55,0.9); transform:rotate(45deg) scale(1.08); }
+}
+
+@keyframes shine{
+  0%,100%{ opacity:0.4; }
+  50%{ opacity:1; }
+}
+
+.splash-title{
+  font-family:Cinzel;
+  font-size:28px;
+  color:var(--accent);
+  letter-spacing:4px;
+  margin-bottom:6px;
+  text-shadow:0 0 20px rgba(212,175,55,0.5);
+}
+
+.splash-sub{
+  font-size:11px;
+  color:#555;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  margin-bottom:40px;
+}
+
+.splash-bar{
+  width:160px;
+  height:2px;
+  background:#1a1a1a;
+  border-radius:2px;
+  overflow:hidden;
+}
+
+.splash-bar-inner{
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+  border-radius:2px;
+  animation:barra 1.8s ease-in-out forwards;
+}
+
+@keyframes barra{
+  0%{ width:0%; }
+  60%{ width:80%; }
+  100%{ width:100%; }
+}
+
+/* HEADER */
+
 header{
   padding:35px 20px 10px;
   text-align:center;
@@ -285,6 +383,19 @@ footer{
 
 <body>
 
+<!-- PANTALLA DE CARGA -->
+<div id="splash">
+  <div class="diamond-wrap">
+    <div class="diamond"></div>
+    <div class="diamond-shine"></div>
+  </div>
+  <div class="splash-title">DIAMANTE NEGRO</div>
+  <div class="splash-sub">Curanilahue · Chile</div>
+  <div class="splash-bar">
+    <div class="splash-bar-inner"></div>
+  </div>
+</div>
+
 <header>
   <img src="logo.png" class="logo">
   <div class="search-box">
@@ -309,11 +420,16 @@ const SHEET_URL="https://docs.google.com/spreadsheets/d/e/2PACX-1vRgQ-ZRf2h64mfo
 
 let items=[];
 
+function ocultarSplash(){
+  document.getElementById("splash").classList.add("oculto");
+}
+
 async function load(){
+  const inicio=Date.now();
   try{
     const url=SHEET_URL+"&t="+Date.now();
     const r=await fetch(url);
-    if(!r.ok) throw new Error("No se pudo cargar");
+    if(!r.ok) throw new Error("HTTP "+r.status);
     const t=await r.text();
     const rows=t.split(/\r?\n/).slice(1);
     items=rows.map(row=>{
@@ -342,6 +458,14 @@ async function load(){
     renderMenu("Todo");
   }catch(e){
     console.error(e);
+    document.getElementById("menu").innerHTML=
+      '<div style="text-align:center;padding:60px 20px;color:#777">Error al cargar el menú.<br><br>'+
+      '<button onclick="location.reload()" style="background:var(--accent);color:#000;border:none;padding:8px 20px;border-radius:8px;cursor:pointer;font-size:13px">Reintentar</button></div>';
+  }finally{
+    // mínimo 1800ms para que el splash se vea completo
+    const transcurrido=Date.now()-inicio;
+    const espera=Math.max(0,1800-transcurrido);
+    setTimeout(ocultarSplash, espera);
   }
 }
 
